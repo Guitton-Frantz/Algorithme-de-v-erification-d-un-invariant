@@ -13,7 +13,7 @@ class TransitionSystem:
     def is_satisfied(self, s, proposition):
         # Implement the logic to evaluate the proposition for the state s
         # You can use SymPy or implement your own logic here.
-        pass
+        sp.eval_expr(proposition, self.L.get(s))
 
     def Post(self, s):
         # Implement the logic to compute the Post(s, act)
