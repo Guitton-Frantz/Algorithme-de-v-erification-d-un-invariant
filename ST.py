@@ -2,6 +2,12 @@ import sympy as sp
 
 
 class TransitionSystem:
+    S: set
+    Act: set
+    transitions: dict
+    I: set
+    Prop: set
+    L: dict
     def __init__(self, S, Act, transitions, I, Prop, L):
         self.S = S  # Set of states
         self.Act = Act  # Set of actions
@@ -37,6 +43,7 @@ def verify_invariant(ST : TransitionSystem, Phi):
 
 # Define the visiter function
 def visiter(s, ST, Phi, R, U, b):
+    U: list = [] # Stack of states
     U.append(s) # Add s to the stack
     R.add(s) # Mark s as accessible
     while U == [] or not b:
@@ -54,30 +61,40 @@ def visiter(s, ST, Phi, R, U, b):
 
 # Test the algorithm
 # Define the set of states
-S = set(["s0", "s1", "s2", "s3", "s4", "s5"])
+S = [
+    ["nc1", "nc2", "y=1"],
+    ["p1", "nc2", "y=1"],
+    ["c1", "nc2", "y=0"],
+    ["nc1", "p2", "y=1"],
+    ["nc1", "c2", "y=0"],
+    ["p1", "p2", "y=1"],
+    ["c1", "p2", "y=0"],
+    ["p1", "c2", "y=0"],
+]
 # Define the set of actions
-Act = set(["a", "b"])
+Act = set(["y <- y+1", "(y > 0): y <- y-1", "null"])
 # Define the transition function
-transitions = {"s0": {"a": "s1", "b": "s2"},
-               "s1": {"a": "s3", "b": "s4"},
-               "s2": {"a": "s4", "b": "s5"},
-               "s3": {"a": "s3", "b": "s4"},
-               "s4": {"a": "s4", "b": "s5"},
-               "s5": {"a": "s5", "b": "s5"}}
+transitions = {["nc1", "nc2", "y=1"]:{["p1", "nc2", "y=1"],["nc1", "p2", "y=1"]},
+                ["p1", "nc2", "y=1"]:{["p1", "p2", "y=1"],["c1", "nc2", "y=0"]},
+                ["c1", "nc2", "y=0"]:{["c1", "p2", "y=0"],["nc1", "nc2", "y=1"]},
+                ["nc1", "p2", "y=1"]:{["p1", "p2", "y=1"],["nc1", "c2", "y=0"]},
+                ["nc1", "c2", "y=0"]:{["p1", "c2", "y=0"],["nc1", "nc2", "y=1"]},
+                ["p1", "p2", "y=1"]:{["c1", "p2", "y=0"],["p1", "c2", "y=0"] },
+                ["c1", "p2", "y=0"]:{["nc1", "p2", "y=1"]},
+                ["p1", "c2", "y=0"]:{["p1", "nc2", "y=1"]},
+               }
 # Define the set of initial states
-I = set(["s0"])
+I = set([["nc1", "nc2", "y=1"]])
 # Define the set of propositions
-Prop = set(["p", "q"])
+Prop = set(["c1", "c2"])
 # Define the labeling function
-L = {"s0": set(["p"]),
-     "s1": set(["p"]),
-     "s2": set(["p"]),
-     "s3": set(["q"]),
-     "s4": set(["q"]),
-     "s5": set(["q"])}
+L = {["nc1", "nc2", "y=1"]:set(["not c1", "not c2"]),}
+
 # Define the transition system
 ST = TransitionSystem(S, Act, transitions, I, Prop, L)
+
 # Define the invariant
-Phi = sp.parse_expr("p & q")
+Phi = sp.parse_expr("(not crit1 or not crit2)")
+
 # Verify the invariant
 print(verify_invariant(ST, Phi))
