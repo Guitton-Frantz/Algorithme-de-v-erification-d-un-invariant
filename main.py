@@ -1,8 +1,8 @@
 from ST import State, TransitionSystem
-from logical_proposition import Not, Or, Variable
+from logical_proposition import And, Not, Or, Variable
 from ST import verify
 
-# --------Test the algorithm--------
+# --------Transition Sytem representing semaphore--------
 
 # Define the set of states
 
@@ -55,6 +55,46 @@ ST = TransitionSystem(s, Act, transitions, i, Prop, l)
 
 # Define the invariant
 Phi = Or(Not(Variable("c1")), Not(Variable("c2")))
+
+# --------Transition Sytem 2 representing crossroads light--------
+
+# Define the set of states
+stateL1 = State("L1")
+stateL2 = State("L2")
+stateL3 = State("L3")
+stateL4 = State("L4")
+
+s2 = set({stateL1, stateL2, stateL3, stateL4})
+# Define the set of actions
+Act2 = set(["null"])
+
+# Define the transition function
+transitions2 = {
+    stateL1: [stateL2, stateL3],
+    stateL2: [stateL1, stateL4],
+    stateL3: [stateL1, stateL4],
+    stateL4: [stateL2, stateL3],
+}
+
+# Define the set of initial states
+i2 = set([stateL1])
+
+# Define the set of propositions
+Prop2 = set(["red0","green0", "red1", "green1"])
+
+# Define the labeling function
+l2 = {
+    stateL1: ["red0","red1"],
+    stateL2: ["vert0","rouge1"],
+    stateL3: ["rouge0","vert1"],
+    stateL4: ["vert0","vert1"]
+}
+
+# Define the transition system
+ST2 = TransitionSystem(s2, Act2, transitions2, i2, Prop2, l2)
+
+# Define the invariant
+Phi2 = Or(And(Variable("red0"), Variable("red1")), And(Variable("green0"), Variable("green1")))
 
 # Verify the invariant
 verify = verify()
