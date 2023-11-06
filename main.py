@@ -49,4 +49,11 @@ Phi = Or(Not(Variable("c1")), Not(Variable("c2")))
 
 # Verify the invariant
 verify = verify()
-print(verify.verify_invariant(ST, Phi))
+result = verify.verify_invariant(ST, Phi)
+if result[0] == "NON":
+    print(result[0])
+    print("Counterexample:")
+    for state in result[1]:
+        print(state.name)
+else:
+    print(result)
