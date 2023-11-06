@@ -8,11 +8,10 @@ class Variable(Proposition):
     def __init__(self, name):
         self.name = name
 
-    def evaluate(self, label:set):
-        #for each label in L, if label contains the variable, return true
-        for l in label:
-            if l == self.name:
-                return True
+    def evaluate(self, label:list):
+        return not(self.name in label)
+
+                
 
 class Not(Proposition):
     prop : Proposition
