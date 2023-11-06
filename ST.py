@@ -26,7 +26,7 @@ class TransitionSystem:
 
     # Implement the logic to evaluate the proposition for the state s
     def is_satisfied(self, state:State, proposition:Proposition):
-        return proposition.evaluate(self.transitions.get(state))
+        return proposition.evaluate(self.l.get(state))
 
     # Return the states accessible from state
     def Post(self, state:State):
