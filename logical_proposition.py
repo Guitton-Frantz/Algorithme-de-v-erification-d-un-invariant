@@ -9,7 +9,7 @@ class Variable(Proposition):
         self.name = name
 
     def evaluate(self, label:list):
-        return not(self.name in label)
+        return self.name in label
 
                 
 
