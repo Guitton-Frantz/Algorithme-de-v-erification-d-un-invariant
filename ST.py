@@ -2,15 +2,9 @@ from logical_proposition import Proposition
 
 class State:
     name: str
-    values: [str]
-
-    def __init__(self, name:str, values:[str]):
+    def __init__(self, name:str):
         self.name = name
-        self.values = values
 
-    def __eq__(self, other):
-        return self.state == other.state
-    
     def __hash__(self):
         return hash(self.name)
 
@@ -32,7 +26,7 @@ class TransitionSystem:
 
     # Implement the logic to evaluate the proposition for the state s
     def is_satisfied(self, state:State, proposition:Proposition):
-        return proposition.evaluate(state.values)
+        return proposition.evaluate(self.transitions.get(state))
 
     # Return the states accessible from state
     def Post(self, state:State):
