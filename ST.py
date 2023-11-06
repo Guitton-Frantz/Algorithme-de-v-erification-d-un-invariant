@@ -16,10 +16,10 @@ class State:
 
 class TransitionSystem:
     s: set[State]
-    Act: set
-    transitions: dict
-    i: set
-    Prop: set
+    Act: set[str]
+    transitions: dict[State, list[State]]
+    i: set[State]
+    Prop: set[str]
     l: dict
 
     def __init__(self, s, Act, transitions, i, Prop, l):
@@ -39,8 +39,8 @@ class TransitionSystem:
         return self.transitions.get(state)
         
 class verify:
-    r:set # Set of accessible states
-    u:list # Stack of states
+    r:set[State] # Set of accessible states
+    u:list[State] # Stack of states
     b:bool # All states in R satisfy Phi
 
     def __init__(self):
@@ -56,7 +56,8 @@ class verify:
         if self.b:
             return "OUI" # ST always satisfies Phi
         else:
-            return ("NON", self.u) # U provides a counterexample
+            # Return a counterexample with the list of states in U
+            return ("NON", self.u)
         
     # Define the visiter function
     def visiter(self, state, ST, Phi, r, u, b):
